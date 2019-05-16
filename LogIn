@@ -1,0 +1,135 @@
+import java.awt.EventQueue;
+import javax.swing.*;
+import java.sql.*;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class login1 extends JFrame {
+
+	//private JFrame frame;
+	private JTextField textField;
+	private JPasswordField passwordField;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					login1 window = new login1();
+					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	Connection connection=null;
+	/**
+	 * Create the application.
+	 */
+	public login1() {
+		initialize();
+		//connection=sqlconnection.dbConnector();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		new JFrame();
+		
+		setBounds(100, 100, 681, 426);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
+		
+		JLabel lblEmailid = new JLabel("Name");
+		lblEmailid.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblEmailid.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmailid.setBounds(278, 11, 130, 44);
+		getContentPane().add(lblEmailid);
+		
+		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		textField.setBounds(226, 66, 237, 34);
+		getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Password");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		lblNewLabel.setBounds(278, 133, 130, 44);
+		getContentPane().add(lblNewLabel);
+		
+		
+		
+		JButton btnlogin = new JButton("login");
+		btnlogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					
+			        // step1 load the driver class			
+			        Class.forName("oracle.jdbc.driver.OracleDriver");			
+			        // step2 create the connection object			
+			        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost", "system", "sahil18");			
+			        // step3 create the statement object			
+			        Statement stmt = con.createStatement();			
+			        // step4 execute query			
+			        String s1 = textField.getText();
+			        String s3 = "";
+			        char s2[] = passwordField.getPassword();
+			        for(int i = 0;i<s2.length;i++)
+			        {
+			        	s3 = s3+s2[i];
+			        }
+			        
+			        ResultSet rs = stmt.executeQuery("SELECT * from user_info where name = '"+s1+"' and pass = '"+s3+"'");
+			        System.out.println("connected");
+			        if (rs.next())
+			        {		
+			          JOptionPane.showMessageDialog(null, "Login Successful");
+                                  close();
+			          Catalog bs = new Catalog(new javax.swing.JFrame(), true);
+			          bs.setVisible(true);
+			          dispose();
+			        }
+			        else
+			        {
+			        	JOptionPane.showMessageDialog(null, "Login unsuccessful");
+			        }
+			        // step5 close the connection object			
+			        con.close();			
+			    } catch (SQLException ex) {
+	
+			        System.out.println(ex);
+	
+			    }catch (ClassNotFoundException ex) {
+	
+			        System.out.println(ex);			
+			    }
+			}
+		});
+		btnlogin.setBounds(418, 276, 119, 28);
+		getContentPane().add(btnlogin);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(226, 188, 237, 34);
+		getContentPane().add(passwordField);
+		
+		
+	}
+        public void close()
+        {
+            setVisible(false);
+        }
+}
