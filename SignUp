@@ -1,0 +1,187 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+import java.awt.BorderLayout;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.awt.event.ActionEvent;
+
+ class signupp extends JFrame{
+
+	//private JFrame frame;
+	private JTextField tfname;
+	private JTextField tfphone;
+	private JTextField tfemailid;
+	private JTextField tfaddress;
+	private JPasswordField tfpassword;
+	private JPasswordField tfconfpass;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					signupp window = new signupp();
+					window.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public signupp() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		new JFrame();
+		setBounds(100, 100, 783, 477);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(null);
+		
+		JLabel lblName = new JLabel("Name");
+		lblName.setBounds(90, 70, 46, 14);
+		getContentPane().add(lblName);
+		
+		JLabel lblNewLabel = new JLabel("Phone");
+		lblNewLabel.setBounds(90, 116, 46, 14);
+		getContentPane().add(lblNewLabel);
+		
+		JLabel lblEmailid = new JLabel("Email_id");
+		lblEmailid.setBounds(90, 166, 46, 14);
+		getContentPane().add(lblEmailid);
+		
+		JLabel lblAddress = new JLabel("Address");
+		lblAddress.setBounds(90, 226, 46, 14);
+		getContentPane().add(lblAddress);
+		
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(90, 277, 46, 14);
+		getContentPane().add(lblPassword);
+		
+		JLabel lblConfirmPassword = new JLabel("    Confirm Password");
+		lblConfirmPassword.setBounds(42, 341, 116, 14);
+		getContentPane().add(lblConfirmPassword);
+		
+		tfname = new JTextField();
+		tfname.setBounds(227, 67, 86, 20);
+		getContentPane().add(tfname);
+		tfname.setColumns(10);
+		
+		tfphone = new JTextField();
+		tfphone.setBounds(227, 113, 86, 20);
+	    getContentPane().add(tfphone);
+		tfphone.setColumns(10);
+		
+		tfemailid = new JTextField();
+		tfemailid.setBounds(227, 163, 86, 20);
+		getContentPane().add(tfemailid);
+		tfemailid.setColumns(10);
+		
+		tfaddress = new JTextField();
+		tfaddress.setBounds(227, 223, 86, 20);
+		getContentPane().add(tfaddress);
+		tfaddress.setColumns(10);
+		
+		tfpassword = new JPasswordField();
+		tfpassword.setBounds(227, 274, 86, 20);
+		getContentPane().add(tfpassword);
+		
+		tfconfpass = new JPasswordField();
+		tfconfpass.setBounds(227, 338, 86, 20);
+		getContentPane().add(tfconfpass);
+		
+		JButton btnRegister = new JButton("register");
+		btnRegister.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+try {
+					
+			        // step1 load the driver class			
+			        Class.forName("oracle.jdbc.driver.OracleDriver");			
+			        // step2 create the connection object			
+			        Connection con = DriverManager.getConnection("jdbc:oracle:thin:@localhost", "system", "sahil18");			
+			        // step3 create the statement object			
+			        Statement stmt = con.createStatement();			
+			        // step4 execute query			
+			        String name = tfname.getText();
+			        String phone = tfphone.getText();
+			        String email_id=tfemailid.getText();
+			        String address=tfaddress.getText();	
+			        String password="";
+			        String cpassword="";
+			        char password1[] = tfpassword.getPassword();
+			        for(int i = 0;i<password1.length;i++)
+			        {
+			        	password = password+password1[i];
+			        }
+			        char password2[] = tfconfpass.getPassword();
+			        for(int i = 0;i<password2.length;i++)
+			        {
+			        	cpassword = cpassword+password2[i];
+			        }
+	if(password.equals(cpassword)&&(!name.isEmpty())&&(!phone.isEmpty())&&(!email_id.isEmpty())&&(!address.isEmpty())&&(!password.isEmpty()))		        
+			        {ResultSet rs = stmt.executeQuery("insert into user_info(name,phone,email_id,address,pass) values('"+name+"',"+phone+",'"+email_id+"','"+address+"','"+password+"')");
+			        System.out.println("connected");
+			        if (rs.next())
+			        {		
+			          JOptionPane.showMessageDialog(null, name+",you are now registered!");
+			          login1 w=new login1();
+			          w.setVisible(true);
+			          dispose();
+			        }
+			        }
+			        else
+			        {
+			        	JOptionPane.showMessageDialog(null, "Information is not correct or left blank :(");
+			        }
+			        // step5 close the connection object			
+			        con.close();			
+			    } catch (SQLException ex) {
+	
+			        System.out.println(ex);
+	
+			    }catch (ClassNotFoundException ex) {
+	
+			        System.out.println(ex);			
+			    }
+			}
+		});
+		btnRegister.setBounds(553, 337, 89, 23);
+		getContentPane().add(btnRegister);
+		
+		JLabel lblFillInThe = new JLabel("            Fill in the Details:");
+		lblFillInThe.setBounds(296, 23, 147, 14);
+		getContentPane().add(lblFillInThe);
+		
+		JButton btnNewButton = new JButton("Back to home");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Shopeazy w1=new Shopeazy(new javax.swing.JFrame(), true);
+				w1.setVisible(true);
+				dispose();
+			}
+		});
+		btnNewButton.setBounds(0, 0, 116, 23);
+		getContentPane().add(btnNewButton);
+	}
+
+}
